@@ -7,16 +7,17 @@ import com.android.ide.common.resources.ResourceResolver
 import com.android.ide.common.vectordrawable.VdPreview
 import com.android.resources.ResourceType
 import com.android.resources.ResourceUrl
+import com.android.tools.configurations.Configuration
 import com.android.tools.idea.configurations.ConfigurationManager
-import com.intellij.openapi.roots.ProjectRootManager
-import com.intellij.openapi.vfs.VirtualFile
-import com.intellij.psi.PsiFile
 import com.husttwj.drawablepreview.drawables.DrawableInflater
 import com.husttwj.drawablepreview.drawables.Utils
 import com.husttwj.drawablepreview.drawables.dom.Drawable
 import com.husttwj.drawablepreview.drawables.forEach
 import com.husttwj.drawablepreview.settings.SettingsUtils
 import com.husttwj.drawablepreview.util.LogUtil
+import com.intellij.openapi.roots.ProjectRootManager
+import com.intellij.openapi.vfs.VirtualFile
+import com.intellij.psi.PsiFile
 import org.w3c.dom.Document
 import org.w3c.dom.Element
 import org.w3c.dom.Node
@@ -74,11 +75,11 @@ object XmlImageFactory {
             return null
         }
         val resolver = getResourceResolver(Utils.getPsiFileFromPath(path))
-       // LogUtil.d("parseDocument() ->  getResourceResolver() is null: ${resolver == null}")
+        // LogUtil.d("parseDocument() ->  getResourceResolver() is null: ${resolver == null}")
         if (resolver != null) {
             replaceResourceReferences(root, resolver)
         }
-       // LogUtil.d("parseDocument() success. path=$path")
+        // LogUtil.d("parseDocument() success. path=$path")
         return document
     }
 
@@ -193,15 +194,45 @@ object XmlImageFactory {
 
         if (resolver == null) {
             resolver = try {
-                ConfigurationManager.getOrCreateInstance(module)
-                    .getConfiguration(element.virtualFile)
-                    .resourceResolver
+                val manager = ConfigurationManager.getOrCreateInstance(module)
+                val configuration = getConfigurationCompat(manager, element.virtualFile)
+                configuration?.resourceResolver
             } catch (e: Exception) {
                 LogUtil.d("getConfiguration error: ${e.message}")
                 null
             }
         }
 
-        return  resolver
+        return resolver
+    }
+
+    /**
+     * invoke ConfigurationManager.getConfiguration by reflect
+     */
+    fun getConfigurationCompat(manager: ConfigurationManager, file: VirtualFile): Configuration? {
+        return try {
+            val clazz = manager.javaClass
+
+            // 获取 myCache 字段
+            val cacheField = clazz.getDeclaredField("myCache")
+            cacheField.isAccessible = true
+            val cache = cacheField.get(manager) as? MutableMap<VirtualFile, Configuration>
+                ?: return null
+
+            // 如果缓存中有就返回
+            cache[file]?.let { return it }
+
+            // 反射调用 create(file) 方法
+            val createMethod = clazz.getDeclaredMethod("create", VirtualFile::class.java)
+            createMethod.isAccessible = true
+            val config = createMethod.invoke(manager, file) as? Configuration ?: return null
+
+            // 放入缓存并返回
+            cache[file] = config
+            config
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
     }
 }
