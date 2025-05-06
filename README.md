@@ -10,11 +10,11 @@
 # Installation
 
 1. Download [plugin zip archive](https://github.com/hust-twj/Android-drawable-preview-pro-plugin/releases/) from release page
-2. Inside Android Studio go to File -> Settings -> Plugins -> Install plugin from disk
+2. Inside Android Studio, go to **File -> Settings -> Plugins -> Install plugin from disk**
 3. Select zip archive
 
-## OR**
+## OR
 
-1. Inside Android Studio go to File -> Settings -> Plugins -> Browse repositories
-2. Search Android Drawable Preview Pro**
+1. Inside Android Studio, go to **File -> Settings -> Plugins -> Marketplace**
+2. Search **Android Drawable Preview Pro**
 3. Click Install Plugin
