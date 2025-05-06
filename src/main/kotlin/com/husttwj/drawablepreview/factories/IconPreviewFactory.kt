@@ -52,7 +52,7 @@ object IconPreviewFactory {
         virtualFile.path.let { path ->
             return when {
                 path.endsWith(Constants.XML_TYPE) -> XmlImageFactory.createXmlImage(path)
-                path.endsWith(Constants.SVG_TYPE) -> SvgImageFactory.createSvgImage(path)
+              //  path.endsWith(Constants.SVG_TYPE) -> SvgImageFactory.createSvgImage(path)
                 else -> BitmapImageFactory.createBitmapImage(path)
             }
         }

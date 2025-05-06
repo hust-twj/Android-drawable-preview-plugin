@@ -10,7 +10,7 @@ plugins {
 group = "com.husttwj.drawablepreview"
 //1. change version
 //2. update changelog in plugin.xml
-version = "2.0.0"
+version = "2.1.0"
 
 
 java {
@@ -47,7 +47,9 @@ dependencies {
     // Kotlin 标准库
    // implementation(kotlin("stdlib-jdk8"))
 
-    implementation("org.apache.xmlgraphics:batik-transcoder:1.7")
+    //parse svga
+  //  implementation("org.apache.xmlgraphics:batik-transcoder:1.9")
+
 }
 
 tasks {

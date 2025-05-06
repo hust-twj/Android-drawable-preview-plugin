@@ -11,7 +11,8 @@
 
     <change-notes><![CDATA[
         <ul>
-            <li><b>2.0.0 (2025.04)</b>: Compatible with Android Studio Meerkat (2024.3) or newer.</li>
+            <li><b>2.1.0 </b>: Bug fix. </li>
+            <li><b>2.0.0 </b>: Compatible with Android Studio Meerkat (2024.3) or newer.</li>
         </ul>
     ]]></change-notes>
 
