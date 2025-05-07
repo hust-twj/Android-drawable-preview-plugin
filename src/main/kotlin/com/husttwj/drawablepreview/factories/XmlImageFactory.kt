@@ -172,7 +172,7 @@ object XmlImageFactory {
 
         var resolver: ResourceResolver? = null
 
-        //fix java.lang.NoSuchMethodError
+        //version 232 or below :  java.lang.NoSuchMethodError
         //'com.android.tools.idea.configurations.Configuration com.android.tools.idea.configurations.ConfigurationManager.getConfiguration(com.intellij.openapi.vfs.VirtualFile)'
         if (resolver == null) {
             resolver = try {

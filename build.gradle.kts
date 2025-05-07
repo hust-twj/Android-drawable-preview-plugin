@@ -62,6 +62,7 @@ tasks {
     }
 
     patchPluginXml {
+        //min:233, 232 or below,  com.android.tools.idea.configurations.Configuration error
         sinceBuild.set("233")
         untilBuild.set("")
     }
